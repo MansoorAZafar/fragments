@@ -4,10 +4,10 @@ A Backend Microservices Project for DPS955 Cloud Computing For Programmers.
 
 ### Table of Contents
 
-**1**. Installation & Running - Getting the project - Running the project
-**2**. Routes
-**3**. Project Structure
-**4**. File Purpose's
+1. Installation & Running - Getting the project - Running the project
+2. Routes
+3. Project Structure
+4. File Purpose's
 
 ## Installation
 
