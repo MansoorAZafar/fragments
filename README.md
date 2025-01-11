@@ -119,3 +119,7 @@ This is where all the source files will exist.
 ### Logger.js
 
 - Defines the custom logger
+
+### Configure.js
+
+- A DTO (Data Transfer Object) for accessing environment variables
