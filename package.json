@@ -5,13 +5,23 @@
   "description": "Backend Microservices Project for DPS955 Cloud Computing For Programmers",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint \"./src/**/*.js\""
   },
   "repository": {
-	"type": "git",
-	"url": "https://github.com/MansoorAZafar/fragments" 
+    "type": "git",
+    "url": "https://github.com/MansoorAZafar/fragments"
   },
   "keywords": [],
   "author": "Mansoor Zafar",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "prettier": "3.4.2"
+  },
+  "dependencies": {
+    "fragments": "file:"
+  }
 }
