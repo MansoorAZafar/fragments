@@ -1,4 +1,5 @@
-const options = { level: process.env.LOG_LEVEL || 'info' };
+const { log_level } = require('../src/configuration');
+const options = { level: log_level || 'info' };
 
 if (options.level == 'debug') {
   // https://github.com/pinojs/pino-pretty
