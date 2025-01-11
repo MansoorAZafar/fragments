@@ -19,11 +19,22 @@ A Backend Microservices Project for DPS955 Cloud Computing For Programmers.
 https://github.com/MansoorAZafar/fragments.git
 ```
 
+
+1.5 **(Optional)** Add Environment Variables
+- Add a .env file in the root of the project
+- optional since there is a default for all options 
+   1. PORT
+      - The port the server will be started on
+   2. LOG_LEVEL
+      - The level that logs will be displayed at
+
+
 2. Install all dependencies
 
 ```bash
 npm i
 ```
+
 
 2.5 **(Optional)** Run ESlint
 
@@ -34,9 +45,6 @@ npm run lint
 - Should not print any errors
 
 ### Run the Project
-
-3. Run the project
-
 ```bash
 npm start      # Run the project in production mode
 npm run dev    # Run the project in developer mode
