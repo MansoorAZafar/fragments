@@ -17,7 +17,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
-const { author, version } = require('../package.json');
 
 //Setup of pino & custom logger
 const logger = require('../src/logger');
@@ -33,24 +32,12 @@ app.use(cors());
 app.use(helmet());
 app.use(compression());
 
+//Declare the routes
 /**
  * @description: A Simple server health check
  * @return {[res.status]} 200 if the server is ok, anything else if bad
  */
-app.get('/', (req, res) => {
-  logger.debug(`User entered Route '/'`);
-  // Clients always fetch this fresh
-  // 'compression' Will never compress this
-  // https://expressjs.com/id/resources/middleware/compression.html
-  res.setHeader('Cache-Control', 'no-cache');
-
-  res.status(200).json({
-    status: 'ok',
-    author,
-    githubUrl: 'https://github.com/MansoorAZafar/fragments',
-    version,
-  });
-});
+app.use('/', require('../src/routes'));
 
 // 404 middleware to handle any requests for resources that can't be found
 /**
