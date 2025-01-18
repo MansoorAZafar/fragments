@@ -4,13 +4,7 @@ const router = express.Router();
 const { author, version } = require('../../package.json');
 const { authenticate } = require('../auth');
 
-//Setup of pino & custom logger
-//const pino = require('pino-http')({
-//  logger,
-//});
-//app setup
 router.use(`/v1`, authenticate(), require('../routes/api'));
-//router.use(pino);
 
 /**
  * @description: A Simple server health check

@@ -1,15 +1,11 @@
-// const getFragments = (req, res) => {
-//   res.status(200).json({
-//     status: 'ok',
-//     fragments: [],
-//   });
-// };
-//const logger = require('../../logger');
+const logger = require('../../logger');
 
-module.exports = (req, res) => {
-  //logger.debug('User Entered /v1/fragments GET');
+const getFragments = (req, res) => {
+  logger.debug('User entered /v1/fragments');
   res.status(200).json({
     status: 'ok',
     fragments: [],
   });
 };
+
+module.exports = getFragments;
