@@ -11,12 +11,16 @@
  *   - Automatic security middleware
  * Compression:
  *   - Reduces size of response data
+ * Passport:
+ *   - Supports implementing authentication & authorization
  */
 
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
+const passport = require('passport');
+const authenticate = require('../src/auth');
 
 //Setup of pino & custom logger
 const logger = require('../src/logger');
@@ -31,6 +35,9 @@ app.use(pino);
 app.use(cors());
 app.use(helmet());
 app.use(compression());
+//Setup passport authentication middleware
+passport.use(authenticate.strategy());
+app.use(passport.initialize());
 
 //Declare the routes
 /**
