@@ -16,17 +16,20 @@ A Backend Microservices Project for DPS955 Cloud Computing For Programmers.
 1. Clone the repository
 
 ```bash
-https://github.com/MansoorAZafar/fragments.git
+git clone ttps://github.com/MansoorAZafar/fragments.git
 ```
 
 
 1.5 **(Optional)** Add Environment Variables
-- Add a .env file in the root of the project
-- optional since there is a default for all options 
-   1. PORT
+- Add a .env file in the root of the project 
+   1. PORT **(Optional)**
       - The port the server will be started on
-   2. LOG_LEVEL
+   2. LOG_LEVEL **(Optional)**
       - The level that logs will be displayed at
+   3. AWS_COGNITO_POOL_ID **(Mandatory)**
+      - The User Pool ID
+   4. AWS_COGNITO_CLIENT_ID **(Mandatory)**
+      - The ID of the web app for your User Pool
 
 
 2. Install all dependencies
@@ -71,6 +74,24 @@ npm run debug  # Run the project in debug mode
 }
 ```
 
+### v1/fragments
+
+- Returns the main data format of this API
+- Requires Authorization (Not every user is allowed here)
+   - Returns 401 if not authorized
+   - Returns 200 if OK
+- Sample Output
+   - Bad Output
+```txt
+HTTP/1.1 401 Unauthorized
+...
+```
+   - Good Output
+```json
+"status": "ok",
+"fragments": []
+```
+
 ## Project Structure
 
 ### / ( Root )
@@ -98,28 +119,68 @@ This is where all the source files will exist.
 <summary>Files</summary>
 <ul>
     <li>app.js</li>
-    <li>configuration.js</li>
+    <li>auth.js</li>
+    <li>index.js</li>
     <li>logger.js</li>
     <li>server.js</li>
+    <li>routes/</li>
+</ul>
+</details>
+
+### src/routes/
+This is where the routes will be handled
+
+<details>
+<summary>Files</summary>
+<ul>
+    <li>index.js</li>
+    <li>api/</li>
+</ul>
+</details>
+
+### src/routes/api
+This is where the implementation logic for the actual routes will be handled
+
+<details>
+<summary>Files</summary>
+<ul>
+    <li>get.js</li>
+    <li>index.js</li>
 </ul>
 </details>
 
 ## Files
+   1. Files in src/
+   2. Files in src/routes
+   3. Files in src/routes/api
 
-### Server.js
+### src/Server.js
 
-- The 'Main' of the microservice
+- The 'Main' (Not Entry point) of the microservice
 - Defines the PORT and runs the server
 
-### App.js
+### src/App.js
 
 - Defines the libraries used
 - Defines the Routes and middleware
 
-### Logger.js
+### src/index.js
+- defines the dotenv for all other files
+- Allows for a fallback if the process's fail
+- Starts the server.js
+- The Entry point of the server
+
+### src/Logger.js
 
 - Defines the custom logger
 
-### Configure.js
+### src/routes/index.js
+- Defines the health check
+- Enables and setup all other routes
 
-- A DTO (Data Transfer Object) for accessing environment variables
+### src/routes/api/index.js
+- Main entry point for the api
+- defines the router and declares the get route
+
+### src/routes/api/get.js
+- defines the implementation for Getting the Fragments
