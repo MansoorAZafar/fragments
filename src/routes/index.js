@@ -3,6 +3,7 @@ const logger = require('../logger');
 const router = express.Router();
 const { author, version } = require('../../package.json');
 const { authenticate } = require('../auth');
+const { createSuccessResponse } = require('../response');
 
 router.use(`/v1`, authenticate(), require('../routes/api'));
 
@@ -17,12 +18,14 @@ router.get('/', (req, res) => {
   // https://expressjs.com/id/resources/middleware/compression.html
   res.setHeader('Cache-Control', 'no-cache');
 
-  res.status(200).json({
-    status: 'ok',
+  const data = {
     author,
     githubUrl: 'https://github.com/MansoorAZafar/fragments',
     version,
-  });
+  };
+  const success = createSuccessResponse(data);
+
+  res.status(200).json(success);
 });
 
 module.exports = router;

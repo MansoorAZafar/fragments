@@ -21,6 +21,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const passport = require('passport');
 const authenticate = require('../src/auth');
+const { createErrorResponse } = require('./response');
 
 //Setup of pino & custom logger
 const logger = require('../src/logger');
@@ -53,13 +54,12 @@ app.use('/', require('../src/routes'));
  */
 app.use((req, res) => {
   logger.debug(`User went to 404 Middleware`);
-  res.status(404).json({
-    status: 'error',
-    error: {
-      message: 'resource not found',
-      code: 404,
-    },
-  });
+
+  const errorCode = 404;
+  const errorMsg = 'resource not found';
+  const error = createErrorResponse(errorCode, errorMsg);
+
+  res.status(404).json(error);
 });
 
 /**
@@ -69,19 +69,14 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || 'unable to process request';
+  const error = createErrorResponse(status, message);
 
   // If server error: Log it
   if (status > 409) {
     logger.error({ err }, 'Error processing request');
   }
 
-  res.status(status).json({
-    status: 'error',
-    error: {
-      message,
-      code: status,
-    },
-  });
+  res.status(status).json(error);
 });
 
 //Export the application to be used in server.js
