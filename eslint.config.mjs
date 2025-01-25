@@ -10,6 +10,6 @@ export default [
       globals: { ...globals.browser, process: 'readonly' },
     },
   },
-  { languageOptions: { globals: globals.browser } },
+  { languageOptions: { globals: globals.browser, ...globals.jest } },
   pluginJs.configs.recommended,
 ];
