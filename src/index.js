@@ -1,5 +1,6 @@
 //Globally define the configuration,
 // so all other files can access it too
+const unneededVariable = 'this variable is never used.';
 require('dotenv').config();
 const logger = require('../src/logger');
 
