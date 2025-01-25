@@ -16,7 +16,7 @@ A Backend Microservices Project for DPS955 Cloud Computing For Programmers.
 1. Clone the repository
 
 ```bash
-git clone ttps://github.com/MansoorAZafar/fragments.git
+git clone https://github.com/MansoorAZafar/fragments.git
 ```
 
 
@@ -39,13 +39,19 @@ npm i
 ```
 
 
-2.5 **(Optional)** Run ESlint
+2.3 **(Optional)** Run ESlint
 
 ```bash
 npm run lint
 ```
 
 - Should not print any errors
+
+2.6 **(Optional)** Run Unit Tests
+```bash
+npm test
+npm run coverage
+```
 
 ### Run the Project
 ```bash
@@ -108,6 +114,9 @@ This is where all configuration files and directories will exist.
     <li>.gitignore</li>
     <li>.vscode/</li>
     <li>src/</li>
+    <li>env.jest</li>
+    <li>jest.config.js</li>
+    <li>.github</li>
 </ul>
 </details>
 
@@ -119,11 +128,12 @@ This is where all the source files will exist.
 <summary>Files</summary>
 <ul>
     <li>app.js</li>
-    <li>auth.js</li>
+    <li>response.js</li>
     <li>index.js</li>
     <li>logger.js</li>
     <li>server.js</li>
     <li>routes/</li>
+    <li>auth/</li>
 </ul>
 </details>
 
@@ -149,10 +159,51 @@ This is where the implementation logic for the actual routes will be handled
 </ul>
 </details>
 
+### src/auth
+
+This is where all the authentication files will exist.
+
+<details>
+<summary>Files</summary>
+<ul>
+    <li>basic-auth.js</li>
+    <li>cognito.js</li>
+    <li>index.js</li>
+</ul>
+</details>
+
+### tests
+
+This is where all the test files are organized.
+
+<details>
+<summary>Files</summary>
+<ul>
+    <li>unit</li>
+    <li>.htpasswd</li>
+</ul>
+</details>
+
+### tests/unit
+
+This is where all the test files will exist.
+
+<details>
+<summary>Files</summary>
+<ul>
+    <li>app.test.js</li>
+    <li>get.test.js</li>
+    <li>health.test.js</li>
+    <li>response.test.js</li>
+</ul>
+</details>
+
 ## Files
    1. Files in src/
    2. Files in src/routes
    3. Files in src/routes/api
+   4. Files in src/auth
+   5. Files in test/units
 
 ### src/Server.js
 
@@ -174,6 +225,10 @@ This is where the implementation logic for the actual routes will be handled
 
 - Defines the custom logger
 
+### src/Response.js
+- Defines the template for a successful response
+- Defines the template for an error response
+
 ### src/routes/index.js
 - Defines the health check
 - Enables and setup all other routes
@@ -184,3 +239,30 @@ This is where the implementation logic for the actual routes will be handled
 
 ### src/routes/api/get.js
 - defines the implementation for Getting the Fragments
+
+### src/auth/basic-auth.js
+- defines the authentication for a basic HTTP authentication with Apache htpasswd
+
+### src/auth/cognito.js
+- Defines the authentication for amazon cognito
+
+### src/auth/index.js
+- defines at run-time which authentication to use
+
+### tests/unit/app.test.js
+- defines the testing for the 404 middleware for the app.js
+
+### tests/unit/get.test.js
+- tests the authentication for unauthenticated and authenticated users
+- tests the respective output
+
+### tests/unit/health.test.js
+- tests the basic health check
+- tests the reponse item & headers
+- ensures correct version and github url
+
+### tests/unit/response.test.js
+- tests the format and return type of the successful response
+- tests the format and return type for the error response
+
+
