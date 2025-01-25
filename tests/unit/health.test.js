@@ -1,3 +1,7 @@
+/// <summary>
+/// This module is a test file for ../../src/routes/index.js
+/// </summary>
+
 const request = require('supertest');
 
 // Get our Express app object (we don't need the server part)
