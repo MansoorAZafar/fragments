@@ -6,6 +6,7 @@ const { createSuccessResponse, createErrorResponse } = require('../../../respons
 
 const createFragment = async (req, res) => {
   logger.debug('User entered POST: /v1/fragments');
+  logger.debug(Buffer.isBuffer(req.body), ': Is buffer');
 
   if (!Buffer.isBuffer(req.body)) {
     logger.warn(`Invalid Buffer: ${req.body}`);
@@ -14,18 +15,10 @@ const createFragment = async (req, res) => {
   }
 
   const { type } = contentType.parse(req);
-  if (!Fragment.isSupportedType(type)) {
-    logger.warn(`Unsupported Content Type: ${type}`);
-    const error = createErrorResponse(415, `Unsupported Content Type: ${type}`);
-    return res.status(415).json(error);
-  }
+  logger.debug('type is: ', type);
 
   const email = req.user?.email || req.headers.authorization?.split(' ')[1]?.split(':')[0];
-  if (!email) {
-    logger.warn(`Invalid email was provided: ${email}`);
-    const error = createErrorResponse(404, `Invalid email was provided: ${email}`);
-    return res.status(404).json(error);
-  }
+  logger.debug('email is: ', email);
 
   const ownerId = crypto.createHash('sha256').update(email).digest('hex');
   const fragment = new Fragment({

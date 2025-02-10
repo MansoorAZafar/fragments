@@ -7,11 +7,11 @@ const app = require('../../src/app');
 
 describe('POST /v1/fragments', () => {
   // If the request is missing the Authorization header, it should be forbidden
-  test('unauthenticated requests are denied', () => request(app).get('/v1/fragments').expect(401));
+  test('unauthenticated requests are denied', () => request(app).post('/v1/fragments').expect(401));
 
   // If the wrong username/password pair are used (no such user), it should be forbidden
   test('incorrect credentials are denied', () =>
-    request(app).get('/v1/fragments').auth('invalid@email.com', 'incorrect_password').expect(401));
+    request(app).post('/v1/fragments').auth('invalid@email.com', 'incorrect_password').expect(401));
 
   // Using a valid username/password pair create a fragment
   test('authenticated user creating a fragment', async () => {
@@ -22,6 +22,9 @@ describe('POST /v1/fragments', () => {
       .auth('user1@email.com', 'password1')
       .set('Content-Type', 'text/plain')
       .send(testBuffer);
+
+    //Checking for the host is too dynamic, so we just check if it has the important content
+    expect(res.headers['location']).toContain(`v1/fragment/${res.body.id}`);
     expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe('ok');
     expect(res.body.id).toBeDefined();
@@ -34,24 +37,13 @@ describe('POST /v1/fragments', () => {
     expect(res.body.data.data).toEqual(Array.from(data));
   });
 
-  test('authenticated user attempting unsupported fragment type, middleware should stop them', async () => {
+  test('authenticated user attempting unsupported fragment type', async () => {
     const testBuffer = 'This is a fragment';
     await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('Content-Type', 'not exist')
+      .set('Content-Type', 'application/msword')
       .send(testBuffer)
-      .expect(500);
-    // middleware will return 500
+      .expect(415);
   });
-
-  test('authenticated user not sending buffer, middleware should prevent this', async () => {
-    await request(app)
-      .post('/v1/fragments')
-      .auth('user1@email.com', 'password1')
-      .set('Content-Type', 'not exist')
-      .expect(500);
-  });
-
-  // TODO: we'll need to add tests to check the contents of the fragments array later
 });

@@ -3,7 +3,6 @@
 /// </summary>
 
 const request = require('supertest');
-
 const app = require('../../src/app');
 
 describe('GET /v1/fragments', () => {
@@ -15,12 +14,117 @@ describe('GET /v1/fragments', () => {
     request(app).get('/v1/fragments').auth('invalid@email.com', 'incorrect_password').expect(401));
 
   // Using a valid username/password pair should give a success result with a .fragments array
-  test('authenticated users get a fragments array', async () => {
+  test('authenticated users get an empty fragments array', async () => {
     const res = await request(app).get('/v1/fragments').auth('user1@email.com', 'password1');
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBe('ok');
     expect(Array.isArray(res.body.fragments)).toBe(true);
   });
 
-  // TODO: we'll need to add tests to check the contents of the fragments array later
+  test('authenticated user gets 1 sent fragments', async () => {
+    // Send a buffer to the user
+    const testBuffer = 'This is a fragment';
+    const data = Buffer.from(testBuffer);
+    let res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/plain')
+      .send(testBuffer);
+
+    const created = res.body.created;
+    const updated = res.body.updated;
+    const size = res.body.size;
+    const id = res.body.id;
+    const ownerId = res.body.ownerId;
+    const type = res.body.type;
+
+    //Ensure its defined
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.id).toBeDefined();
+    expect(res.body.ownerId).toBeDefined();
+    expect(res.body.type).toBe('text/plain');
+    expect(res.body.created).toBeDefined();
+    expect(res.body.updated).toBeDefined();
+    expect(res.body.size).toBe(testBuffer.length);
+    expect(res.body.data.type).toEqual('Buffer');
+    expect(res.body.data.data).toEqual(Array.from(data));
+
+    res = await request(app).get(`/v1/fragments`).auth('user1@email.com', 'password1');
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragments[0].ownerId).toEqual(ownerId);
+    expect(res.body.fragments[0].type).toEqual(type);
+    expect(res.body.fragments[0].created).toEqual(created);
+    expect(res.body.fragments[0].updated).toEqual(updated);
+    expect(res.body.fragments[0].size).toEqual(size);
+    expect(res.body.fragments[0].id).toEqual(id);
+  });
+
+  test('authenticated user gets multiple sent fragments', async () => {
+    // Send a buffer to the user
+    const testBuffers = ['These are fragments A', 'B', 'C'];
+    const data = [
+      Buffer.from(testBuffers[0]),
+      Buffer.from(testBuffers[1]),
+      Buffer.from(testBuffers[2]),
+    ];
+    let res;
+
+    const testFragments = [];
+    for (let i = 0; i < 3; ++i) {
+      res = await request(app)
+        .post('/v1/fragments')
+        .auth('user2@email.com', 'password2')
+        .set('Content-Type', 'text/plain')
+        .send(testBuffers[i]);
+
+      const created = res.body.created;
+      const updated = res.body.updated;
+      const size = res.body.size;
+      const id = res.body.id;
+      const ownerId = res.body.ownerId;
+      const type = res.body.type;
+
+      testFragments[i] = {
+        created,
+        updated,
+        size,
+        id,
+        ownerId,
+        type,
+      };
+
+      //Make sure they're all valid
+      expect(res.statusCode).toBe(201);
+      expect(res.body.status).toBe('ok');
+      expect(res.body.id).toBeDefined();
+      expect(res.body.ownerId).toBeDefined();
+      expect(res.body.type).toBe('text/plain');
+      expect(res.body.created).toBeDefined();
+      expect(res.body.updated).toBeDefined();
+      expect(res.body.size).toBe(testBuffers[i].length);
+      expect(res.body.data.type).toEqual('Buffer');
+      expect(res.body.data.data).toEqual(Array.from(data[i]));
+    }
+
+    res = await request(app).get(`/v1/fragments`).auth('user2@email.com', 'password2');
+    expect(Array.isArray(res.body.fragments)).toBe(true);
+    expect(res.body.fragments.length).toBe(3);
+
+    const receivedFragments = res.body.fragments;
+    expect(receivedFragments).toEqual(res.body.fragments);
+
+    for (let i = 0; i < 3; ++i) {
+      expect(res.statusCode).toBe(200);
+      expect(res.body.status).toBe('ok');
+      expect(res.body.fragments[i].ownerId).toEqual(testFragments[i].ownerId);
+      expect(res.body.fragments[i].type).toEqual(testFragments[i].type);
+      expect(res.body.fragments[i].created).toEqual(testFragments[i].created);
+      expect(res.body.fragments[i].updated).toEqual(testFragments[i].updated);
+      expect(res.body.fragments[i].size).toEqual(testFragments[i].size);
+      expect(res.body.fragments[i].id).toEqual(testFragments[i].id);
+    }
+  });
 });
