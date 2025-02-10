@@ -74,8 +74,9 @@ class Fragment {
    */
   static async byId(ownerId, id) {
     const rawFragment = await readFragment(ownerId, id);
-    if (!rawFragment)
+    if (!rawFragment) {
       throw new Error(`Fragment doesn't exist with ownerId: ${ownerId} and id: ${id}`);
+    }
 
     return Promise.resolve(new Fragment(rawFragment));
   }
