@@ -64,6 +64,14 @@ npm run coverage
 npm start      # Run the project in production mode
 npm run dev    # Run the project in developer mode
 npm run debug  # Run the project in debug mode
+
+# Or running with docker
+docker build -t fragments:latest .                                                                         # Build the docker image
+docker run --rm --name fragments --env-file .env -p 8080:8080 fragments:latest                             # Run and delete the image afterwords
+docker run --rm --name fragments --env-file env.jest -e LOG_LEVEL=debug -p 8080:8080 -d fragments:latest   # Run the docker as a detached daemon
+
+docker logs [id]      # Check the logs for the container
+docker logs -f [id]   # Follow the logs for the container
 ```
 
 ## Routes
