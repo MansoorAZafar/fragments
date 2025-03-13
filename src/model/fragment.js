@@ -17,9 +17,9 @@ const {
 class Fragment {
   static supportedTypes = [
     'text/plain',
-    // 'text/markdown',
-    // 'text/html',
-    // 'application/json',
+    'text/markdown',
+    'text/html',
+    'application/json',
     // 'image/png',
     // 'image/jpeg',
     // 'image/webp',
