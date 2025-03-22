@@ -28,12 +28,31 @@ describe('GET /v1/fragments', () => {
       .set('Content-Type', 'text/plain')
       .send(testBuffer);
 
-    const id = res.body.id;
+    const id = res.body.fragment.id;
     res = await request(app).get(`/v1/fragments/${id}`).auth('user1@email.com', 'password1');
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.status).toBe('ok');
-    expect(res.body.data).toEqual(testBuffer);
+    expect(res.type).toBe('text/plain');
+    expect(res.charset).toBe(undefined);
+    expect(res.text).toEqual(testBuffer);
+  });
+
+  test('authenticated users get fragment with charset', async () => {
+    // Send a buffer to the user
+    const testBuffer = 'This is a fragment';
+    let res = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/plain; charset=utf-8')
+      .send(testBuffer);
+
+    const id = res.body.fragment.id;
+    res = await request(app).get(`/v1/fragments/${id}`).auth('user1@email.com', 'password1');
+
+    expect(res.statusCode).toBe(200);
+    expect(res.type).toBe('text/plain');
+    expect(res.charset).toBe('utf-8');
+    expect(res.text).toEqual(testBuffer);
   });
 
   test('authorized user gets invalid fragment with bad ID', async () => {
@@ -59,12 +78,11 @@ describe('GET /v1/fragments', () => {
       .set('Content-Type', 'text/markdown')
       .send(testBuffer);
 
-    const id = res.body.id;
+    const id = res.body.fragment.id;
     res = await request(app).get(`/v1/fragments/${id}.html`).auth('user1@email.com', 'password1');
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.status).toBe('ok');
-    expect(res.body.data).toEqual(
+    expect(res.text).toEqual(
       `<h1>H1 here</h1>\n` +
         `<p>paragraph here</p>\n` +
         `<h2>H2 here</h2>\n` +
@@ -91,7 +109,7 @@ describe('GET /v1/fragments', () => {
       .set('Content-Type', 'text/markdown')
       .send(testBuffer);
 
-    const id = res.body.id;
+    const id = res.body.fragment.id;
     res = await request(app)
       .get(`/v1/fragments/${id}.incompatible`)
       .auth('user1@email.com', 'password1');

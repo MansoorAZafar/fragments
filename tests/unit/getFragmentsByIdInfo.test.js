@@ -28,12 +28,12 @@ describe('GET /v1/fragments', () => {
       .set('Content-Type', 'text/plain')
       .send(testBuffer);
 
-    const created = res.body.created;
-    const updated = res.body.updated;
-    const size = res.body.size;
-    const id = res.body.id;
-    const ownerId = res.body.ownerId;
-    const type = res.body.type;
+    const created = res.body.fragment.created;
+    const updated = res.body.fragment.updated;
+    const size = res.body.fragment.size;
+    const id = res.body.fragment.id;
+    const ownerId = res.body.fragment.ownerId;
+    const type = res.body.fragment.type;
 
     res = await request(app).get(`/v1/fragments/${id}/info`).auth('user1@email.com', 'password1');
 
