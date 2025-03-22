@@ -31,24 +31,24 @@ describe('GET /v1/fragments', () => {
       .set('Content-Type', 'text/plain')
       .send(testBuffer);
 
-    const created = res.body.created;
-    const updated = res.body.updated;
-    const size = res.body.size;
-    const id = res.body.id;
-    const ownerId = res.body.ownerId;
-    const type = res.body.type;
+    const created = res.body.fragment.created;
+    const updated = res.body.fragment.updated;
+    const size = res.body.fragment.size;
+    const id = res.body.fragment.id;
+    const ownerId = res.body.fragment.ownerId;
+    const type = res.body.fragment.type;
 
     //Ensure its defined
     expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe('ok');
-    expect(res.body.id).toBeDefined();
-    expect(res.body.ownerId).toBeDefined();
-    expect(res.body.type).toBe('text/plain');
-    expect(res.body.created).toBeDefined();
-    expect(res.body.updated).toBeDefined();
-    expect(res.body.size).toBe(testBuffer.length);
-    expect(res.body.data.type).toEqual('Buffer');
-    expect(res.body.data.data).toEqual(Array.from(data));
+    expect(res.body.fragment.id).toBeDefined();
+    expect(res.body.fragment.ownerId).toBeDefined();
+    expect(res.body.fragment.type).toBe('text/plain');
+    expect(res.body.fragment.created).toBeDefined();
+    expect(res.body.fragment.updated).toBeDefined();
+    expect(res.body.fragment.size).toBe(testBuffer.length);
+    expect(res.body.fragment.data.type).toEqual('Buffer');
+    expect(res.body.fragment.data.data).toEqual(Array.from(data));
 
     res = await request(app).get(`/v1/fragments?expand=1`).auth('user1@email.com', 'password1');
 
@@ -75,14 +75,14 @@ describe('GET /v1/fragments', () => {
     //Ensure its defined
     expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe('ok');
-    expect(res.body.id).toBeDefined();
-    expect(res.body.ownerId).toBeDefined();
-    expect(res.body.type).toBe('text/plain');
-    expect(res.body.created).toBeDefined();
-    expect(res.body.updated).toBeDefined();
-    expect(res.body.size).toBe(testBuffer.length);
-    expect(res.body.data.type).toEqual('Buffer');
-    expect(res.body.data.data).toEqual(Array.from(data));
+    expect(res.body.fragment.id).toBeDefined();
+    expect(res.body.fragment.ownerId).toBeDefined();
+    expect(res.body.fragment.type).toBe('text/plain');
+    expect(res.body.fragment.created).toBeDefined();
+    expect(res.body.fragment.updated).toBeDefined();
+    expect(res.body.fragment.size).toBe(testBuffer.length);
+    expect(res.body.fragment.data.type).toEqual('Buffer');
+    expect(res.body.fragment.data.data).toEqual(Array.from(data));
 
     res = await request(app).get(`/v1/fragments`).auth('user1@email.com', 'password1');
 
@@ -150,12 +150,12 @@ describe('GET /v1/fragments', () => {
         .set('Content-Type', 'text/plain')
         .send(testBuffers[i]);
 
-      const created = res.body.created;
-      const updated = res.body.updated;
-      const size = res.body.size;
-      const id = res.body.id;
-      const ownerId = res.body.ownerId;
-      const type = res.body.type;
+      const created = res.body.fragment.created;
+      const updated = res.body.fragment.updated;
+      const size = res.body.fragment.size;
+      const id = res.body.fragment.id;
+      const ownerId = res.body.fragment.ownerId;
+      const type = res.body.fragment.type;
 
       testFragments[i] = {
         created,
@@ -169,14 +169,14 @@ describe('GET /v1/fragments', () => {
       //Make sure they're all valid
       expect(res.statusCode).toBe(201);
       expect(res.body.status).toBe('ok');
-      expect(res.body.id).toBeDefined();
-      expect(res.body.ownerId).toBeDefined();
-      expect(res.body.type).toBe('text/plain');
-      expect(res.body.created).toBeDefined();
-      expect(res.body.updated).toBeDefined();
-      expect(res.body.size).toBe(testBuffers[i].length);
-      expect(res.body.data.type).toEqual('Buffer');
-      expect(res.body.data.data).toEqual(Array.from(data[i]));
+      expect(res.body.fragment.id).toBeDefined();
+      expect(res.body.fragment.ownerId).toBeDefined();
+      expect(res.body.fragment.type).toBe('text/plain');
+      expect(res.body.fragment.created).toBeDefined();
+      expect(res.body.fragment.updated).toBeDefined();
+      expect(res.body.fragment.size).toBe(testBuffers[i].length);
+      expect(res.body.fragment.data.type).toEqual('Buffer');
+      expect(res.body.fragment.data.data).toEqual(Array.from(data[i]));
     }
 
     res = await request(app).get(`/v1/fragments?expand=1`).auth('user2@email.com', 'password2');

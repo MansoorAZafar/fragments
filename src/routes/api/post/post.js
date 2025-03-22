@@ -1,5 +1,4 @@
 const { Fragment } = require('../../../model/fragment');
-const contentType = require('content-type');
 const logger = require('../../../logger');
 const crypto = require('crypto');
 const { createSuccessResponse, createErrorResponse } = require('../../../response');
@@ -14,7 +13,7 @@ const createFragment = async (req, res) => {
     return res.status(415).json(error);
   }
 
-  const { type } = contentType.parse(req);
+  const type = req.get('Content-Type');
   logger.debug('type is: ', type);
 
   const email = req.user?.email || req.headers.authorization?.split(' ')[1]?.split(':')[0];
@@ -24,17 +23,16 @@ const createFragment = async (req, res) => {
   const fragment = new Fragment({
     ownerId,
     type,
-    size: req.body.length,
   });
 
   await fragment.save();
   await fragment.setData(req.body);
 
-  const success = createSuccessResponse({ ...fragment, data: req.body });
+  const success = createSuccessResponse({ fragment: { ...fragment, data: req.body } });
 
   const protocol = req.protocol || 'http';
   const baseURL = process.env.API_URL || `${protocol}://${req.headers.host}`;
-  const fragmentURL = new URL(`/v1/fragment/${fragment.id}`, baseURL.toString());
+  const fragmentURL = new URL(`/v1/fragments/${fragment.id}`, baseURL.toString());
 
   res.setHeader('Location', fragmentURL);
   return res.status(201).json(success);

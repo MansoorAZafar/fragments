@@ -6,6 +6,9 @@
   "scripts": {
     "test": "jest -c jest.config.js --runInBand --",
     "test:watch": "jest -c jest.config.js --runInBand --watch --",
+    "test:integration": "hurl --test --glob \"tests/integration/**/*.hurl\"",
+    "test:health": "hurl --test \"tests/integration/health-check.hurl\"",
+    "test:post": "hurl --test \"tests/integration/post-fragments-json.hurl\"",
     "coverage": "jest -c jest.config.js --runInBand --coverage",
     "lint": "eslint \"./src/**/*.js\" \"tests/**/*.js\"",
     "start": "node src/index.js",
@@ -21,6 +24,7 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@orangeopensource/hurl": "^6.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.18.0",
     "globals": "^15.14.0",
