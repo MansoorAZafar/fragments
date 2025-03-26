@@ -7,6 +7,7 @@ const { createSuccessResponse } = require('../response');
 
 router.use(`/v1`, authenticate(), require('../routes/api'));
 
+const { hostname } = require('os');
 /**
  * @description: A Simple server health check
  * @return {[res.status]} 200 if the server is ok, anything else if bad
@@ -22,6 +23,7 @@ router.get('/', (req, res) => {
     author,
     githubUrl: 'https://github.com/MansoorAZafar/fragments',
     version,
+    hostname: hostname(),
   };
   const success = createSuccessResponse(data);
 
