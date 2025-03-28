@@ -80,10 +80,10 @@ RUN npm ci --only=production
 
 # Copy server's source code into the image
 # - Copy src to /app/src/
-COPY --chown=node:node ./src ./src
+COPY ./src ./src
 
 # Copy our HTPASSWD file
-COPY --chown=node:node ./tests/.htpasswd ./tests/.htpasswd
+COPY ./tests/.htpasswd ./tests/.htpasswd
 
 
 ##############################################################################
@@ -105,10 +105,6 @@ LABEL description="Fragments node.js microservice"
 # Indicate the port a server will listen when ran
 # We run our service on port 8080
 EXPOSE 8080
-
-
-# Switch the User 
-USER node
 
 
 # Setup the Health Check
