@@ -88,8 +88,7 @@ class Fragment {
    * @returns Promise<void>
    */
   static delete(ownerId, id) {
-    deleteFragment(ownerId, id);
-    return Promise.resolve();
+    return deleteFragment(ownerId, id);
   }
 
   /**

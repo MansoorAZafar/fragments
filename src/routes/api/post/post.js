@@ -25,8 +25,8 @@ const createFragment = async (req, res) => {
     type,
   });
 
-  await fragment.save();
   await fragment.setData(req.body);
+  await fragment.save();
 
   const success = createSuccessResponse({ fragment: { ...fragment, data: req.body } });
 
