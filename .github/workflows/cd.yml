@@ -93,6 +93,7 @@ jobs:
             NODE_ENV=production
             USE_IN_MEMORY=true
             PORT=80
+            AWS_S3_BUCKET_NAME=${{secrets.AWS_S3_BUCKET_NAME}}
             API_URL=${{secrets.API_URL}}
             AWS_COGNITO_POOL_ID=${{secrets.AWS_COGNITO_POOL_ID}}
             AWS_COGNITO_CLIENT_ID=${{secrets.AWS_COGNITO_CLIENT_ID}}
