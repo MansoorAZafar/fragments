@@ -7,6 +7,7 @@
     "test": "jest -c jest.config.js --runInBand --",
     "test:watch": "jest -c jest.config.js --runInBand --watch --",
     "test:integration": "hurl --test --glob \"tests/integration/**/*.hurl\"",
+    "test:lab10": "hurl --test \"tests/integration/lab-10-dynamodb.hurl\"",
     "test:lab9": "hurl --test \"tests/integration/lab-9-s3.hurl\"",
     "coverage": "jest -c jest.config.js --runInBand --coverage",
     "lint": "eslint \"./src/**/*.js\" \"tests/**/*.js\"",
@@ -33,7 +34,9 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.782.0",
     "@aws-sdk/client-s3": "^3.777.0",
+    "@aws-sdk/lib-dynamodb": "^3.782.0",
     "aws-jwt-verify": "^5.0.0",
     "compression": "^1.7.5",
     "cors": "^2.8.5",

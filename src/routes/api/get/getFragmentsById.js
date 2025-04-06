@@ -18,6 +18,7 @@ const getFragmentsById = async (req, res) => {
     const extensionType = req.params.id.split('.')[1];
 
     const fragment = await Fragment.byId(ownerId, id);
+    logger.info({ fragment }, 'Returned Fragment');
     type = fragment.type;
     const data = await fragment.getData();
 
