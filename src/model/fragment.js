@@ -87,17 +87,17 @@ class Fragment {
    * @param {string} id fragment's id
    * @returns Promise<void>
    */
-  static delete(ownerId, id) {
-    return deleteFragment(ownerId, id);
+  static async delete(ownerId, id) {
+    return await deleteFragment(ownerId, id);
   }
 
   /**
    * Saves the current fragment (metadata) to the database
    * @returns Promise<void>
    */
-  save() {
+  async save() {
     this.updated = new Date().toISOString();
-    writeFragment(this);
+    await writeFragment(this);
     return Promise.resolve();
   }
 

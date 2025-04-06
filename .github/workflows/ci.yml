@@ -93,20 +93,6 @@ jobs:
       - name: Build Containers
         run: docker compose up -d
 
-      # Wait for the services to be fully up (with a timeout of 60 seconds)
-      - name: Wait for services to be ready
-        run: |
-          echo "Waiting for services to be ready..."
-          for i in {1..10}; do
-            if wget -q --spider http://localhost:8080; then
-              echo "Service is ready"
-              break
-            else
-              echo "Waiting for service to be ready... attempt $i"
-              sleep 5
-            fi
-          done
-
       - name: Set permission for script
         run: chmod +x ./scripts/local-aws-setup.sh
       - name: Setup Local AWS Resources

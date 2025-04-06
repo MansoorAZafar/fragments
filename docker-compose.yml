@@ -31,8 +31,6 @@ services:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - AWS_SESSION_TOKEN=test
-      # in memory for now
-      - USE_IN_MEMORY=true
     # Ports to publish
     ports:
       - '8080:8080'
