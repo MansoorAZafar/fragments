@@ -106,7 +106,6 @@ jobs:
               sleep 5
             fi
           done
-          "
 
       - name: Set permission for script
         run: chmod +x ./scripts/local-aws-setup.sh
