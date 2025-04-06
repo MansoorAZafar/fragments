@@ -41,7 +41,7 @@ git clone https://github.com/MansoorAZafar/fragments.git
 2. Install all dependencies
 
 ```bash
-npm i
+npm install
 ```
 
 
