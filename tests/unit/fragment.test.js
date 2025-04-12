@@ -9,13 +9,10 @@ const validTypes = [
   `text/markdown`,
   `text/html`,
   `application/json`,
-
-  /*
   `image/png`,
   `image/jpeg`,
   `image/webp`,
   `image/gif`,
-  */
 ];
 
 describe('Fragment class', () => {
@@ -60,6 +57,20 @@ describe('Fragment class', () => {
 
       fragment = new Fragment({ ownerId: '1234', type: 'text/html', size: 0 });
       expect(fragment.type).toEqual('text/html');
+    });
+
+    test('type can be any image type', () => {
+      let fragment = new Fragment({ ownerId: '1234', type: 'image/png', size: 0 });
+      expect(fragment.type).toEqual('image/png');
+
+      fragment = new Fragment({ ownerId: '1234', type: 'image/jpeg', size: 0 });
+      expect(fragment.type).toEqual('image/jpeg');
+
+      fragment = new Fragment({ ownerId: '1234', type: 'image/webp', size: 0 });
+      expect(fragment.type).toEqual('image/webp');
+
+      fragment = new Fragment({ ownerId: '1234', type: 'image/gif', size: 0 });
+      expect(fragment.type).toEqual('image/gif');
     });
 
     test('type can be application/json', () => {

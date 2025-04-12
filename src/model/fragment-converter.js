@@ -1,9 +1,24 @@
-const Markdownit = require('markdown-it');
-const md = new Markdownit();
+const MarkdownIt = require('markdown-it');
+const stripTags = require('striptags');
+const Papa = require('papaparse');
+const yaml = require('js-yaml');
+const sharp = require('sharp');
+
+const md = new MarkdownIt();
 
 class Converter {
   static supportedConversions = {
+    'text/plain': ['txt'],
     'text/markdown': ['md', 'html', 'txt'],
+    'text/html': ['html', 'txt'],
+    'text/csv': ['csv', 'txt', 'json'],
+    'application/json': ['json', 'yaml', 'yml', 'txt'],
+    'application/yaml': ['yaml', 'txt'],
+    'image/png': ['png', 'jpg', 'webp', 'gif', 'avif'],
+    'image/jpeg': ['png', 'jpg', 'webp', 'gif', 'avif'],
+    'image/webp': ['png', 'jpg', 'webp', 'gif', 'avif'],
+    'image/gif': ['png', 'jpg', 'webp', 'gif', 'avif'],
+    'image/avif': ['png', 'jpg', 'webp', 'gif', 'avif'],
   };
 
   /**
@@ -25,37 +40,120 @@ class Converter {
    */
   static async ConvertToType(data, fragment, type) {
     const actualData = data.toString();
+    const { type: srcType } = fragment;
 
     if (type == undefined) {
       return Promise.resolve(actualData);
     }
 
-    if (!this.isSupported(fragment.type, type)) {
-      throw new Error(`fragment of type ${fragment.type} cannot be converted to type ${type}`);
+    if (!type || !this.isSupported(srcType, type)) {
+      throw new Error(`Cannot convert ${srcType} to ${type}`);
     }
 
-    let res;
-    switch (fragment.type) {
-      case 'text/markdown':
-        res = await Converter.convertMarkdown(actualData, type);
-        break;
+    if (srcType.startsWith('text/')) {
+      return this.ConvertText(srcType, actualData, type);
+    }
+    if (srcType.startsWith('application/')) {
+      return this.ConvertApplication(srcType, actualData, type);
+    }
+    if (srcType.startsWith('image/')) {
+      return this.ConvertImage(data, type); // original buffer needed
     }
 
-    return Promise.resolve(res);
+    throw new Error(`Unsupported fragment type: ${srcType}`);
   }
 
-  static async convertMarkdown(data, type) {
-    let res;
+  static async ConvertText(type, data, target) {
+    switch (type) {
+      case 'text/markdown':
+        return this.convertMarkdown(data, target);
+      case 'text/html':
+        return this.convertHTML(data, target);
+      case 'text/csv':
+        return this.convertCSV(data, target);
+      case 'text/plain':
+        return data;
+      default:
+        return data;
+    }
+  }
 
+  static async ConvertApplication(type, data, target) {
+    switch (type) {
+      case 'application/json':
+        return this.convertJSON(data, target);
+      case 'application/yaml':
+        return this.convertYAML(data, target);
+      default:
+        return data;
+    }
+  }
+
+  static async ConvertImage(buffer, targetFormat) {
+    return sharp(buffer).toFormat(targetFormat).toBuffer();
+  }
+
+  // -------------------------------
+  // TEXT CONVERSION HELPERS
+  // -------------------------------
+  static convertMarkdown(data, type) {
     switch (type) {
       case 'html':
-        res = md.render(data);
-        break;
+        return md.render(data);
+      case 'txt':
+        return stripTags(md.render(data));
       default:
-        res = data;
+        return data;
     }
+  }
 
-    return res;
+  static convertHTML(data, type) {
+    if (type === 'txt') {
+      return stripTags(data);
+    }
+    return data;
+  }
+
+  static convertCSV(data, type) {
+    const parsed = Papa.parse(data, { header: type === 'json', skipEmptyLines: false });
+
+    switch (type) {
+      case 'json':
+        return JSON.stringify(parsed.data);
+      case 'txt':
+        return parsed.data
+          .map((row) => (Array.isArray(row) ? row.join(' ') : Object.values(row).join(' ')))
+          .join('\n');
+      default:
+        return data;
+    }
+  }
+
+  static convertJSON(data, type) {
+    const obj = JSON.parse(data);
+
+    switch (type) {
+      case 'yaml':
+      case 'yml':
+        return yaml.dump(obj);
+      case 'txt':
+        return JSON.stringify(obj);
+      default:
+        return data;
+    }
+  }
+
+  static convertYAML(data, type) {
+    const obj = yaml.load(data);
+
+    switch (type) {
+      case 'json':
+        return JSON.stringify(obj);
+      case 'txt':
+        return JSON.stringify(obj);
+      default:
+        return data;
+    }
   }
 }
 

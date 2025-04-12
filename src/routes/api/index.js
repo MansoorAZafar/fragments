@@ -28,9 +28,14 @@ const rawBody = () =>
 router.get('/fragments', require('./get/get'));
 router.get('/fragments/:id', require('./get/getFragmentsById'));
 router.get('/fragments/:id/info', require('./get/getFragmentsByIdInfo'));
+
+// DELETE /v1/fragments/id
 router.delete('/fragments/:id', require('./delete/delete'));
 
 // :POST /v1/fragments
 router.post('/fragments', rawBody(), require('../api/post/post'));
+
+// PUT /v1/fragments/id
+router.put('/fragments/:id', rawBody(), require('./put/put'));
 
 module.exports = router;

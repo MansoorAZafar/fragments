@@ -19,11 +19,14 @@ class Fragment {
     'text/plain',
     'text/markdown',
     'text/html',
+    'text/csv',
     'application/json',
-    // 'image/png',
-    // 'image/jpeg',
-    // 'image/webp',
-    // 'image/gif',
+    'application/yaml',
+    'image/png',
+    'image/jpeg',
+    'image/webp',
+    'image/gif',
+    'image/avif',
   ];
 
   constructor({ id, ownerId, created, updated, type, size = 0 }) {

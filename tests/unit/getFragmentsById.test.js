@@ -118,7 +118,7 @@ describe('GET /v1/fragments', () => {
     expect(res.body.status).toBe('error');
     expect(res.body.error.code).toBe(404);
     expect(res.body.error.message).toEqual(
-      `Invalid Fragment ID: ${id}.incompatible: fragment of type text/markdown cannot be converted to type incompatible`
+      `Invalid Fragment ID: ${id}.incompatible: Cannot convert text/markdown to incompatible`
     );
   });
 });
