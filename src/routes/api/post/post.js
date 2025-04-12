@@ -7,7 +7,7 @@ const createFragment = async (req, res) => {
   logger.debug('User entered POST: /v1/fragments');
   logger.debug(Buffer.isBuffer(req.body), ': Is buffer');
 
-  if (!Buffer.isBuffer(req.body)) {
+  if (!Buffer.isBuffer(req.body) || req.body.length == 0) {
     logger.warn(`Invalid Buffer: ${req.body}`);
     const error = createErrorResponse(415, `Invalid Buffer: ${req.body}`);
     return res.status(415).json(error);
@@ -26,8 +26,6 @@ const createFragment = async (req, res) => {
   });
 
   await fragment.setData(req.body);
-  // await fragment.save();
-
   const success = createSuccessResponse({ fragment: { ...fragment, data: req.body } });
 
   const protocol = req.protocol || 'http';
